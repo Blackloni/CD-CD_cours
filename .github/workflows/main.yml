@@ -11,7 +11,7 @@ jobs:
   # JOB 1 : Lint
   # ─────────────────────────────────
   lint:
-    name: 🔍 Lint
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout du code
@@ -33,7 +33,7 @@ jobs:
   # JOB 2 : Tests unitaires
   # ─────────────────────────────────
   test-unit:
-    name: 🧪 Tests unitaires
+    name: Tests unitaires
     runs-on: ubuntu-latest
     needs: lint
     steps:
@@ -63,7 +63,7 @@ jobs:
   # JOB 3 : Tests d'intégration
   # ─────────────────────────────────
   test-integration:
-    name: 🔗 Tests d'intégration
+    name: Tests d'intégration
     runs-on: ubuntu-latest
     needs: test-unit
     steps:
@@ -88,7 +88,7 @@ jobs:
   # JOB 4 : Build
   # ─────────────────────────────────
   build:
-    name: 🏗️ Build
+    name: Build
     runs-on: ubuntu-latest
     needs: test-integration
     steps:
@@ -115,7 +115,7 @@ jobs:
   # → Required reviewers → ajouter le prof/lead
   # ─────────────────────────────────
   deploy-prod:
-    name: 🚀 Deploy → production
+    name: Deploy → production
     runs-on: ubuntu-latest
     needs: build
     if: github.event_name == 'push'   # Pas de deploy sur les PR
@@ -124,9 +124,5 @@ jobs:
       url: https://cd-cd-cours.onrender.com
 
     steps:
-      - name: Deploy vers Render (production)
-        uses: JorgeLNJunior/render-deploy@v1.5.0
-        with:
-          service_id: ${{ secrets.RENDER_DEPLOY_HOOK }}
-          api_key: ${{ secrets.RENDER_API_KEY }}
-          wait_deploy: false
+      - name: 🚀 Deploy vers Render (production)
+        run: curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
