@@ -127,6 +127,6 @@ jobs:
       - name: Deploy vers Render (production)
         uses: JorgeLNJunior/render-deploy@v1.5.0
         with:
-          service_id: ${{ secrets.RENDER_SERVICE_ID_PROD }}
+          service_id: ${{ secrets.RENDER_DEPLOY_HOOK }}
           api_key: ${{ secrets.RENDER_API_KEY }}
           wait_deploy: false
