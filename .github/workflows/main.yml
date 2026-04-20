@@ -80,7 +80,7 @@ jobs:
         run: npm ci
 
       - name: Tests d'intégration
-        run: npm run test:integration
+        run: npm test
         env:
           NODE_ENV: test
 
