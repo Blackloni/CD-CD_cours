@@ -45,4 +45,4 @@ jobs:
         with:
           service_id: ${{ secrets.RENDER_SERVICE_ID }}
           api_key: ${{ secrets.RENDER_API_KEY }}
-          wait_deploy: true
+          wait_deploy: false
