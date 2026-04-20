@@ -1,0 +1,71 @@
+name: CI → dev
+
+on:
+  push:
+    branches: ["dev"]
+  pull_request:
+    branches: ["dev"]
+
+jobs:
+  # ─────────────────────────────────
+  # JOB 1 : Lint (vérification qualité code)
+  # ─────────────────────────────────
+  lint:
+    name: 🔍 Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Installation des dépendances
+        run: npm ci
+
+      - name: Vérification ESLint
+        run: npm run lint
+
+  # ─────────────────────────────────
+  # JOB 2 : Tests unitaires
+  # ─────────────────────────────────
+  test:
+    name: 🧪 Tests unitaires
+    runs-on: ubuntu-latest
+    needs: lint               # Lance uniquement si le lint passe
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Installation des dépendances
+        run: npm ci
+
+      - name: Lancement des tests
+        run: npm test
+
+  # ─────────────────────────────────
+  # JOB 3 : Déploiement sur env dev
+  # (uniquement sur push, pas sur PR)
+  # ─────────────────────────────────
+  deploy-dev:
+    name: 🚀 Deploy → dev
+    runs-on: ubuntu-latest
+    needs: test               # Lance uniquement si les tests passent
+    if: github.event_name == 'push'   # Pas de deploy sur les PR
+
+    steps:
+      - name: Deploy vers Render (env dev)
+        uses: JorgeLNJunior/render-deploy@v1.5.0
+        with:
+          service_id: ${{ secrets.RENDER_SERVICE_ID_DEV }}
+          api_key: ${{ secrets.RENDER_API_KEY }}
+          wait_deploy: false
