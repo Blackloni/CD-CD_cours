@@ -4,7 +4,7 @@ const PORT = process.env.PORT || 3000
 
 app.get('/', (req, res) => {
   res.json({
-    message: '🚀 Hello DevOps !',
+    message: 'Hello DevOps ! Version 2',
     status: 'ok',
     version: '1.0.0',
     deploye_par: 'GitHub Actions + Render'
@@ -16,5 +16,5 @@ app.get('/health', (req, res) => {
 })
 
 app.listen(PORT, () => {
-  console.log(`✅ Serveur lancé sur le port ${PORT}`)
+  console.log(`Serveur lancé sur le port ${PORT}`)
 })
